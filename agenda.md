@@ -15,7 +15,7 @@ Tool: QGIS. **Fully offline** — all software and data distributed on flash dri
 
 ## The day frame
 
-All three days run **09:00 → 16:00**.
+All three days run from around **09:00 → 16:00**.
 
 | | |
 |---|---|
@@ -32,12 +32,10 @@ All three days run **09:00 → 16:00**.
 
 ## Design principles
 
-**1. One exercise per day.** Last year we badly overestimated both participant ability and group
-pace. All 2025 timing estimates should be ignored — the deck budgeted 45 minutes for the flood
-exercise and 35 for the spatial join, and both are multiples of that in practice.
+**1. One exercise per day.** Last year we badly overestimated group pace. 
 
-**2. Day 1 will re-hash last year's material, but teach it as if it was new.** Don't lie to them and tell them it's new, I just mean we shouldn't assume they remember anything. We want to establish
-a common foundation and make sure everyone is starting from the same place on the exercises, since we don't know the composition of the room in advance this time. 
+**2. Day 1 will re-hash last year's material, but teach it as if it was new.** Don't lie to them and tell them it's new, I just mean we shouldn't assume they remember anything.
+We want to establish a common foundation and make sure everyone is starting from the same place on the exercises, since we don't know the composition of the room in advance this time. 
 
 **3. Assume no internet.** 
 
@@ -49,11 +47,8 @@ a common foundation and make sure everyone is starting from the same place on th
   (`"DN" == 1`) in Stage D, both inherited unchanged from the 2025 handout. By Day 3 an
   expression box is familiar ground, so Field Calculator and Select-by-expression can be used
   freely in the projects.
-- **The Python console appears in exactly one place:** a supplied, ready-to-run snippet that
-  loops zonal statistics over a time series. Projects 1 and 5 need it, because stepping through
-  ten years of nightlights or a season of NDVI by hand through the GUI is tedious and
-  error-prone. Participants run it and change one or two variables at the top. They do not write
-  it, and nothing else in the workshop requires the console.
+- **The Python console appears in only one place:** a supplied, ready-to-run snippet that
+  loops zonal statistics over a time series.They don't write it, they're just shown it.
 - **Nobody is taught to program.** The snippet is a labelled tool, and the handout says so.
 
 **5. Everyone leaves with something they made.** Three artifacts, one per day.
