@@ -1,0 +1,34 @@
+# Inherited 2025 workshop materials — ~1.1 GB of pptx/docx/tif plus a redundant zip.
+# Two of the decks are 167 MB each, well over GitHub's 100 MB per-file hard limit,
+# so these cannot be committed without Git LFS. Kept on disk, out of git.
+malawi workshop 2025/
+malawi workshop 2025-*.zip
+
+# Workshop data and binaries we generate (rasters, shapefiles, QGIS projects, installers)
+*.tif
+*.tiff
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.qgz
+*.qgs
+*.qgd
+*.gpkg
+*.zip
+*.exe
+*.msi
+
+# Office/output formats
+*.pptx
+*.docx
+*.xlsx
+*.pdf
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*~
+.ipynb_checkpoints/
+__pycache__/
