@@ -49,7 +49,7 @@ We want to establish a common foundation and make sure everyone is starting from
   freely in the projects.
 - **The Python console appears in only one place:** a supplied, ready-to-run snippet that
   loops zonal statistics over a time series.They don't write it, they're just shown it.
-- **Nobody is taught to program.** The snippet is a labelled tool, and the handout says so.
+- **Nobody is taught to program.** The snippet is a labeled tool, and the handout says so.
 
 **5. Everyone leaves with something they made.** Three artifacts, one per day.
 
@@ -69,7 +69,7 @@ We want to establish a common foundation and make sure everyone is starting from
 - We would like to get them to the same place we got them to at the end of Satej's workshop last year, with a map of highlighted flood-affected buildings 
 - Stage A can run lean or long depending on how the room handles the software.
 - If short on time, the post-flood repetition in Stage B will be dropped first, picking up from the checkpoint
-- If VERY short on time, we can shrink the SAR demo to just a brief walkthrough and overview
+- If VERY short on time, we can shrink SAR to the slides only and skip the extension
 - If necessary, spill over to Day 2 morning
 
 **Welcome.** Introductions, then a goals round: what do you want to learn, measure, understand, get out of this workshop?
@@ -94,67 +94,216 @@ swap who is driving at each stage boundary so that both of them actually use the
 | 1 | **Why we care** — three questions an NSO might ask: who was flooded, where is poverty concentrated, how is land use changing. We answer the first two this week. Blantyre poverty map and Nsanje flood imagery as anchors | Merritt |
 | 2 | **How imagery works** — reflection off surfaces → sensor → bands → pixel grid + georeferencing → resolution → RGB vs multispectral | Merritt |
 | 3 | **Raster vs vector, and ready-made datasets** — plus Open Buildings, OSM, GHSL | Merritt |
-| 4 | **Choosing a sensor** — Landsat, Sentinel-2, Sentinel-1, VIIRS individually, then the trade-off table: resolution vs revisit vs cost vs cloud-penetration. Keep the cloud-cover failure slide | Prabhmeet |
-| 5 | **The tool landscape** — QGIS, ArcGIS, Earth Engine, Python, R. What each is for? | Prabhmeet |
-| 6 | **How to see water** — Nsanje framed operationally: *aid is limited, which households do we reach?* Why "just look at it" fails on muddy floodwater. Then histograms and thresholds | Prabhmeet |
+| 4 | **Choosing a sensor** — Landsat, Sentinel-2, Sentinel-1, VIIRS individually, then the trade-off table: resolution vs revisit vs cost vs cloud-penetration. Keep the cloud-cover failure slide | Merritt |
+| 5 | **The tool landscape** — QGIS, ArcGIS, Earth Engine, Python, R. What each is for? | Merritt |
+| 6 | **How to see water** — Nsanje framed operationally: *aid is limited, which households do we reach?* Why "just look at it" fails on muddy floodwater. Then histograms and thresholds | Merritt |
 
 Block 6 leads into the practical activity, so it's important we get to it.
 
 **Break the lecture roughly at the halfway mark.** Stand up, stretch.
 
-#### What we can re-use from Satej's lecture last year
+#### Block 1 — why we care
 
-Day 1 is meant to go back over the ground we covered in Blantyre. We can't cover all of it, so here's what I propose keeping. 
+**Three questions an NSO gets asked.** One slide, and it sets up the whole week:
+1. **After a flood, how many households were affected, and where?** → Day 1
+2. **Where is poverty concentrated, below the district level?** → Day 2
+3. **How is land use changing** — cities spreading, cropland shifting? → Day 3 (projects 2 and 5)
 
-| 2025 material | 2026 |
-|---|---|
-| Deck 1A — use cases (poverty map, floods, crop mapping) | **Retained**, compressed to a short opening |
-| 2B 3–17 — EM spectrum, reflectance, source→surface→sensor, raster post-processing, georeferencing, resolution, band combination | **Retained** The core of Lecture 1 |
-| 2B 6–9 — water vs vegetation reflectance | **Retained**, moved to where it sets up the flood work |
-| 2B 34 — ready-made datasets (Open Buildings, OSM, GHSL) | **Retained.** Open Buildings is used in Stage D the same afternoon; OSM in three Day 3 projects |
-| 2B 35–36 — raster vs vector | **Retained**, then reinforced hands-on in Stage A |
-| 2B 18–33 — seven sensor profiles | **Retained** (Landsat, S2, S1, VIIRS) plus a trade-off table. CHIRPS and MODIS drop to a mention — they reappear in Day 3 project 5. Cloud-cover failure slide kept |
-| 2B 42–47 — tool survey (ArcGIS, GEE, geopandas, sf) | **Retained**, brief |
-| 2B 59–98 — flood exercise and spatial join | **Retained**, and given the whole afternoon |
-| 2B 71–82 — NDWI / SAR / SAR+DEM / flood risk maps | **Retained**, and added as a tail to the flood exercise (Stage C) |
-| 2B 37–39 — file formats, providers, aerial/drone | **Moved to Day 3** |
-| 2B 48 — resources | **Moved to Day 3** |
+We answer the first two together this week. The third is on the Day 3 menu for anyone who wants it.
+
+**Why the usual tools struggle with these.** Frame it in terms they already work with:
+- **Census:** complete coverage, but once a decade. Malawi's last was 2018, so by October 2026 it's
+  eight years old.
+- **Household surveys (IHS):** current, but the sample is designed for national and district
+  estimates. Below that there are too few households to report a number.
+- **Field assessments after a disaster:** accurate, but slow and expensive, and the flooded areas
+  are the hardest ones to reach.
+- **Satellite imagery:** covers everywhere, repeats every few days to weeks, and the sensors we
+  use are free. But it measures *surfaces*, not people. That's why every example this week pairs
+  imagery with something on the ground: building footprints on Day 1, survey data on Day 2.
+
+Close the framing with: *an estimate from imagery is still an estimate, with error, like a
+survey.* Day 2 is about that error.
+
+**Anchors, from Lecture Part A:**
+- **Floods:** Nsanje dry season vs wet season (slides 14–18). Stop there; slides 19–20 (muddy
+  water vs soil, then the extra signal that separates them) belong in block 6.
+- **Poverty:** Blantyre, ~1,300 survey points → consumption estimates for 178,810 households
+  (4–9). Slide 9 (targeting and measurement) is the payoff for an NSO audience.
+- **Land use:** field boundaries and crop types (10–13). The crop legend (barley, canola, alfalfa)
+  isn't from Malawi, so say it's an example from elsewhere.
+- **Preview of today:** slide 21. Update its bullets to match Exercise 1's four stages, and note
+  the export is a CSV (it opens in Excel).
+
+#### Block 4 — choosing a sensor
+
+Sensor profiles are Part B 22–37: Landsat, Sentinel-2 (including the cloud-cover slide, 27),
+Sentinel-1, VIIRS, then CHIRPS and MODIS. CHIRPS and MODIS stay in and get covered quickly; both come
+back in project 5. The trade-off table is slide 42:
+
+| Sensor | Pixel | Revisit | Through clouds? | Cost |
+|---|---|---|---|---|
+| **Landsat 8 & 9** | 30 m | 16 days each, 8 days combined | No | Free |
+| **Sentinel-2** | 10 m for red, green, blue and near-infrared; 20–60 m for the rest | 5 days at the equator | No | Free |
+| **Sentinel-1** (radar) | 10 m | 6 days | Yes | Free |
+| **VIIRS** (night lights) | 750 m | Daily | No | Free |
+
+For reference, not slide material: Sentinel-1's 10 m is pixel spacing, with ~20 m true resolution;
+VIIRS composites sit on a ~500 m grid; MODIS is 250 m–1 km every 1–2 days; CHIRPS is a 0.05° grid
+(~5.5 km), satellite infrared plus rain gauges, 1981 to present.
+
+**Changes worth knowing about in 2026** (not slide material, but they affect the data guide and
+Day 3):
+- **Sentinel-1** is back to two satellites. Sentinel-1B failed in December 2021, leaving 1A alone
+  on a 12-day cycle. Sentinel-1C has been fully operational since May 2025, and 1D since April 2026;
+  the 6-day cycle was re-established on 24 June 2026, and 1A was retired at the end of June.
+- **VIIRS:** NOAA stops delivering Suomi NPP data on 1 November 2026. VIIRS continues on NOAA-20
+  and NOAA-21, and archived data isn't affected.
+- **MODIS:** the Terra and Aqua satellites begin shutting down in late 2026 or early 2027. The
+  archive stays available, so project 5's past seasons are fine, but the data-sources guide should
+  point to VIIRS for anything going forward.
+
+Sources:
+[USGS Landsat 8–9 Collection 2](https://www.usgs.gov/centers/eros/science/usgs-eros-archive-landsat-archives-landsat-8-9-operational-land-imager-and) ·
+[NASA Landsat 9](https://science.nasa.gov/missions/landsat/landsat-9-to-provide-a-wealth-of-data-to-landsat-archive/) ·
+[ESA Sentinel-2](https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-2) ·
+[SentiWiki S2 mission](https://sentiwiki.copernicus.eu/web/s2-mission) ·
+[SentiWiki S1 mission](https://sentiwiki.copernicus.eu/web/s1-mission) ·
+[ESA: Sentinel-1B mission ends](https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-1/Mission_ends_for_Copernicus_Sentinel-1B_satellite) ·
+[Sentinel-1 data products](https://sentinel.esa.int/web/sentinel/missions/sentinel-1/data-products) ·
+[S1C/D final orbital configuration, 24 Jun 2026](https://dataspace.copernicus.eu/news/2026-6-24-s1cd-final-orbital-configuration-achieved) ·
+[EOG VIIRS nighttime lights](https://eogdata.mines.edu/products/vnl/) ·
+[VIIRS DNB composites metadata](https://data.opendatascience.eu/geonetwork/static/api/records/e8f02f4a-0f98-44c3-8311-6e45555ef3fb) ·
+[NOAA: Suomi NPP data cessation](https://www.nesdis.noaa.gov/news/cessation-of-suomi-national-polar-orbiting-partnership-s-npp-data-users-onafter-november-01-2026) ·
+[NASA Earthdata MODIS](https://www.earthdata.nasa.gov/data/instruments/modis) ·
+[NASA: MODIS to VIIRS transition](https://www.earthdata.nasa.gov/data/alerts-outages/transition-from-modis-viirs) ·
+[CHC CHIRPS](https://www.chc.ucsb.edu/data/chirps) ·
+[UCAR Climate Data Guide: CHIRPS v3](https://climatedataguide.ucar.edu/climate-data/chirps-climate-hazards-infrared-precipitation-station-data-version-3)
+
+#### Block 6 — how to see water
+
+Goal: participants read a histogram and call the threshold *before* QGIS opens. Goes right before
+the Exercise 1 title slide (Part B 52). About seven slides. The histogram images are in
+`day1_floods/lectures/figures/`, made from the actual exercise rasters.
+
+1. **The question for this afternoon.** After the Nsanje flood, aid is limited: which households do
+   we reach first? That takes two things: where the buildings are, and where the water is. The
+   buildings we have (Open Buildings, slide 38). The water is the hard part.
+2. **Can't we just look at it?** Put up an ordinary color (RGB) image of the flooded area. Part A
+   slide 19 ("Not obvious how to distinguish between soil and muddy floodwaters") is this slide
+   already. Ask the room to point to the water. Muddy floodwater and wet soil
+   are both brown, so people disagree, and a map can't be built on people disagreeing.
+3. **Water in near-infrared.** Plants reflect near-infrared strongly; water absorbs it. So in the
+   near-infrared band, water is dark and almost everything else is bright. Reuse Part B 8–9 here (or
+   57, which repeats them), then Part A 20, where the water stands out.
+4. **Every pixel is a number.** Tie back to slide 10: each pixel in the near-infrared band has a
+   value. In this scene they run from about 7,000 to 26,000 before the flood. Dark (low) means
+   likely water.
+5. **Reading a histogram:** `nir_hist_preflood_blank.png`. Across the bottom is the value, up the
+   side is how many pixels have it. Ask: what's the big hump? (land) What's the small bump on the
+   far left? (water) Where would you draw the line between them? Most people point at the dip
+   around 10,000.
+6. **The threshold:** `nir_hist_preflood.png`. 10,000 sits in the dip. About 1% of the scene falls
+   below it.
+7. **Call it again after the flood:** `nir_hist_postflood_blank.png`, then `nir_hist_postflood.png`.
+   Ask the same question. This time there's no clean dip; the low values are a long flat shoulder
+   running into the land hump, because muddy and shallow water blends into wet ground. At the same
+   10,000 line, about 3% of the scene is water, three times as much as before. Two points to
+   land:
+   - **A threshold is a judgment call**, like a poverty line. Move it and the count changes. That
+     matters on Day 2 too.
+   - **The whole land hump moved right** (brighter) between September and March, most likely
+     greener vegetation in the rainy season. Which is why the threshold is checked on each image,
+     not copied blindly.
+
+Then slide 52: "This afternoon you'll do exactly this in QGIS."
+
+#### What we can re-use from last year's decks
+
+Two decks in `day1_floods/lectures/`. **Part A** (`Day 1 Lecture Part A.pptx`, 26 slides) is last
+year's use-cases deck: Blantyre poverty map, crop mapping, Nsanje floods. **Part B**
+(`Day 1 Lecture Part B.pptx`) is last year's 2B deck. Part B numbers are from Merritt's edited
+version (92 slides, 13 Sep), listed in deck order.
+
+| Slides | Content | 2026 |
+|---|---|---|
+| **A** 1–3 | Title, introductions, overview of uses | **Block 1.** Add Prabhmeet's introduction. Title slide says 5–8 October; the workshop is 5–7 |
+| **A** 4–9 | Blantyre poverty map | **Block 1** |
+| **A** 10–13 | Field boundaries and crop types | **Block 1**, brief |
+| **A** 14–18 | Nsanje floods | **Block 1** |
+| **A** 19–20 | Muddy water vs soil; extra signal separates them | **Block 6** |
+| **A** 21 | Preview of today's technical session | **Retained**, bullets updated to the four stages |
+| **A** 22–25 | Flood prediction; urban planning and energy examples | **Cut** |
+| **A** 26 | Key points | Optional close for block 1 |
+| **B** 1–2 | Title; agenda | Update: title still says 18–19 August 2025, Blantyre; agenda still lists QGIS set-up and the 2025 exercises |
+| **B** 3–7, 10–17 | Remote sensing principles, post-processing, resolution, band combination | **Block 2** |
+| **B** 8–9 | Water vs vegetation reflectance | **Block 2**, reused in block 6 |
+| **B** 18–21 | Why use this data? (three questions, why the usual tools struggle) | **Block 1** content |
+| **B** 22–37 | Sensor profiles: Landsat, Sentinel-2 incl. cloud cover, Sentinel-1, VIIRS, CHIRPS, MODIS | **Block 4**; CHIRPS and MODIS covered quickly |
+| **B** 38–41 | Ready-made datasets; raster vs vector; layering | **Block 3** |
+| **B** 42 | Sensor trade-off table | **Block 4** |
+| **B** 43–49 | Tool survey (QGIS, ArcGIS, Earth Engine, geopandas, sf) | **Block 5** |
+| **B** 50 | Further resources | **Retained** |
+| **B** 51 | Data for exercises (download link) | Link is dead and fails offline; point to the flash drive |
+| — | *(new)* How to see water | **Block 6**, see above |
+| **B** 52–63 | Flood detection with NIR | **Stages A–B.** The slides are the participant handout, so Stage A needs new slides |
+| **B** 64–66 | Cloud-covered imagery | **Stage C** discussion prompt |
+| **B** 67–78 | NDWI, SAR, SAR + DEM, flood risk maps, questions, key points | **Stage C** |
+| **B** 79–90 | Spatial join with buildings | **Stage D** |
+| **B** 91–92 | Key points; Zikomo | Day 1 wrap |
 
 ### Exercise 1 — four stages
 One continuous exercise carried through the day. Each stage ends at a shipped `.qgz` checkpoint so anyone who falls behind rejoins at the next boundary rather than dropping out for the day.
 
-**Stage A — QGIS, taught on the flood data.** This replaces last year's standalone Exercise 0, which depended on OSM and Google Satellite XYZ tiles.
+**Stages A and B are a demonstration.** Merritt drives on the projector, participants watch. They take over at the Stage B checkpoint: everyone opens `day1_stage_B.qgz` from the `checkpoints` folder and works hands-on from Stage C. This replaces last year's standalone Exercise 0, which depended on OSM and Google Satellite XYZ tiles, and it gets the room to the same starting line regardless of how fast anyone types.
+
+Two consequences to plan around:
+- **Their first hands-on action is opening a checkpoint.** Walk that one step slowly — Project ▸ Open — because every later fallback depends on it.
+- **Their first time loading a file is Stage D** (the buildings). Day 3 projects all begin with loading layers, so don't rush that step; it is the only loading practice they get before then.
+
+**Stage A — QGIS, shown on the flood data.** Demonstrated, not followed along.
 1. Interface tour — panels, layers, toolbars. Slowly.
 2. Load `Nsanje_Landsat8_RGB_preflood`; pan, zoom, watch pixels appear at high zoom.
-3. Load GADM admin-2 boundaries over it; layer order, transparency, opacity. They see the difference between vector and raster directly.
+3. Load the GADM district boundaries (`gadm41_MWI_1`, admin-1) over it; layer order, transparency, opacity. They see the difference between vector and raster directly. (Not admin-2: in GADM's Malawi data that's traditional authorities, so Nsanje would come up as 11 pieces.)
 4. Attribute table; select Nsanje; select Zomba (they're standing in it).
-5. Symbology: RGB composite vs single-band grey; min/max stretch on the NIR band.
-6. CRS: layer CRS vs project CRS.
+5. Symbology: RGB composite vs single-band gray; min/max stretch on the NIR band.
+6. CRS: layer CRS vs project CRS. The imagery is in UTM zone 36S (EPSG:32736), in meters; the districts are in latitude/longitude (EPSG:4326), in degrees. They still line up because QGIS reprojects on the fly. The districts are left in 4326 on purpose so this step has something to show.
 7. Save as `.qgz`, close QGIS, reopen, to show anyone who fell behind how to catch up. 
 
-**Stage B — NIR flood detection.** *(First expression field of the workshop.)* Properties → Histogram → Compute → Raster Calculator
+**Stage B — NIR flood detection.** Still demonstrated. *(First expression field of the workshop.)* Properties → Histogram → Compute → Raster Calculator
 `Nsanje_Landsat8_NIR_preflood@1 < 10000` → Symbology, Paletted/Unique values, Classify, delete the 0 class. Then repeat for post-flood and stack to compare.
 
-**Stage C — complicating NIR, introducing SAR**
+**Stage C — complicating NIR, introducing SAR** *(hands-on from here: everyone opens `day1_stage_B.qgz` first)*
 Pose it as a hypothetical: *rain causes flooding, and rain comes with clouds — so what happens when the day you need imagery is a cloudy one?* 
 Put a cloud-covered scene on the projector and ask what they would do. Pairs, then report back, then synthesis. 
 Steer toward floods come with storms, storms come with clouds, optical sensors cannot see through cloud, 
-and a 16-day revisit means the next clear scene may arrive after the water has receded. 
+and an 8–16 day revisit means the next clear scene may arrive after the water has receded. 
 Then **SAR on the projector**: active sensing, sends its own signal, works at night and through
 cloud, smooth water reflects away so water is dark, and it looks strange (speckle, no
-intuitive colours) which is normal. Show the same threshold workflow on Sentinel-1 and put the
+intuitive colors) which is normal. Show the same threshold workflow on Sentinel-1 and put the
 two water masks side by side. Then ask them to compare what they see: where do they agree, where
 do they disagree, which would you trust, and what benefits does each ahve? NIR is easy to interpret
 and easy to explain to a non-specialist, but it is weather-dependent. SAR is all-weather and
 works at night, but it is noisier and much harder to read. Which one you use depends on
-whether you can afford to wait for a clear sky. They watch rather than click through it
-themselves. Ship the SAR data and a written walkthrough anyway, so anyone can redo it later or on Day 3.
+whether you can afford to wait for a clear sky.
+
+**SAR extension.** Hands-on for anyone ahead of the room, shown on the projector otherwise. The
+same Raster Calculator step as Stage B, on `Nsanje_Sentinel1_VV_dB_postflood.tif` (18 Mar 2025,
+four days after the Landsat post-flood image): `Nsanje_Sentinel1_VV_dB_postflood@1 < -16`. Values
+are radar backscatter in decibels, and water is dark (very negative). Checked on the data:
+- **After the flood, −16 dB works.** The histogram has a separate water bump around −20 to −16 dB
+  with a dip at −16. About 1.9% of the scene falls below it, and 81% of those pixels are also
+  water in the NIR mask.
+- **Radar finds only about half the NIR water**, which is the discussion: four days of receding
+  water, and flooded vegetation can bounce the radar signal back bright.
+- **Don't demo on the pre-flood scene** (`…_preflood.tif`, 7 Sep 2024). There's no water bump, and
+  dry bare ground in the dry season is dark to radar too, so the same threshold picks up land.
 
 **Stage D — the deliverable.** *(Second expression field.)* Export the post-flood water raster → **Raster ▸ Conversion ▸ Polygonize** 
- I think the order is this, but I'll produce a document that details all the steps here
 → filter `"DN" == 1` → load `nsanje_buildings.shp` → **Processing Toolbox ▸ Vector general 
 ▸ Join attributes by location** (buildings first, flood second, "discard records that could not be joined" checked) 
-→ read the count off the attribute table → export to CSV.
+→ read the count off the attribute table → export to CSV. This order matches the 2025 step slides (Lecture Part B 88–96), which become the Stage D handout.
+**Expected answer: 108 buildings.** Checked 15 Sep by running these exact steps in QGIS 3.44.14 on the post-flood NIR (1,585 flood polygons, 36,077 buildings). Both join types give 108, so the one-to-many default doesn't double-count here.
 
 ---
 
@@ -173,9 +322,9 @@ themselves. Ship the SAR data and a written walkthrough anyway, so anyone can re
 - If tight on time, we can cut Stage B's second classification scheme
 - We can also cut the code demo, I think that actually might be the first thing I cut since it's not clear to me they will take anything aaway from that
 
-### Lecture 2 — split between instructors
+### Lecture 2 — Prabhmeet
 
-*From imagery to welfare* (Merritt). NSO already understands small-area estimation — census plus survey. This is the same logic with imagery standing in for the census, 
+*From imagery to welfare* (Prabhmeet). NSO already understands small-area estimation — census plus survey. This is the same logic with imagery standing in for the census, 
 which means estimates can be refreshed between census rounds instead of waiting ten years. Then the mechanics: survey clusters give training labels → extract imagery features at those
 locations → fit → predict everywhere. What is actually visible that tracks welfare — roof material, building size and density, road access, nightlights, cropland. Then the 
 limits of poverty maps: only as good as the training survey, degrades over time and across regions, cannot see income, and uncertainty at small areas is larger than the map implies.
@@ -188,7 +337,7 @@ lot of the country from wave 2. It is not a nationally representative sample and
 households. We'll build a poverty map using that data, which will give us a map that's wrong in a specific, explainable direction.
 
 **Representativity** If you take these households, average consumption
-by district or EA or whatever the lowest granularity we can afford, and colour the districts in, the result is biased. Urban households are
+by district or EA or whatever the lowest granularity we can afford, and color the districts in, the result is biased. Urban households are
 overrepresented and urban consumption is higher, so district averages get pulled upward and the
 map understates poverty. The bias isn't uniform either: it's worst in the districts where the
 urban share of our sample is most inflated relative to the real urban share of that district, so
@@ -211,7 +360,7 @@ observations are behind each cell. Then pick a threshold below which we suppress
 give another, and TAs will have far more thin or empty units. This is the modifiable areal unit
 problem. It's a tradeoff between spatial detail and reliability.
 
-**Points versus areas.** They see the raw households first, coloured by consumption, and only
+**Points versus areas.** They see the raw households first, colored by consumption, and only
 then aggregate. Aggregation that discards information.
 
 **Direct estimates versus model predictions.** Where we have households we have a direct
@@ -226,7 +375,7 @@ wide, and adjacent categories on the map frequently overlap.
 **Binning.** Quintiles are ordinal by construction, so they exist whether or not the differences
 are real, and they throw away magnitude, so a country with tiny dispersion and one with huge
 dispersion produce the same looking map. Bins that mean something outside the data, like above
-and below the national poverty rate or a programme eligibility cutoff, usually answer a more
+and below the national poverty rate or a program eligibility cutoff, usually answer a more
 useful question.
 
 ### Exercise 2 — two stages
@@ -313,9 +462,9 @@ own short handout. Each reuses Day 1–2 skills and produces an artifact.
 | # | Project | Reuses | Artifact |
 |---|---|---|---|
 | **1** | **Tourism infrastructure** — nightlights over time at lodge/resort locations around Lake Malawi and Liwonde, plus OSM accommodation POIs and built-up change | Raster loading, symbology, zonal statistics, attribute joins, **supplied console snippet** | Tourism infrastructure map + a nightlights trend table |
-| **2** | **Urban growth** — built-up expansion in Lilongwe, Blantyre or Zomba between two epochs | Raster differencing, polygonize, spatial join | Growth map + area statistics |
+| **2** | **Urban growth** — built-up expansion in Zomba, Sentinel-2 on 30 Jul 2016 vs 20 Jul 2026 (20 × 20 km around the city) | Raster differencing, polygonize, spatial join | Growth map + area statistics |
 | **3** | **Population and access** — how many people live more than 5 km from a health facility | Zonal statistics, vector buffers, spatial join | Access map + population counts |
-| **4** | **Flooding in another district** — repeat the Day 1 workflow on Chikwawa, Salima or Karonga | Everything from Day 1, directly | Flood extent + affected buildings for a new district |
+| **4** | **Flooding in Chikwawa** — repeat the Day 1 workflow on the same March 2025 flood, 30 × 30 km of the Shire floodplain upstream of Nsanje. Landsat 8, 19 Sep 2024 vs 14 Mar 2025. Expected answer: 55 buildings | Everything from Day 1, directly | Flood extent + affected buildings for a new district |
 | **5** | **Agricultural seasonality** — NDVI by district through the season, against CHIRPS rainfall | Zonal statistics, time series, charting, **supplied console snippet** | Seasonality chart + map by district |
 
 Project 4 is the safety net: it is the Day 1 workflow on new data, so anyone who struggled on

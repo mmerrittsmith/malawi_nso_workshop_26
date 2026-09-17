@@ -1,0 +1,13 @@
+<PAMDataset>
+  <PAMRasterBand band="1">
+    <Description>Sentinel-1 Calibrated and Terrain Corrected VV</Description>
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MINIMUM">-26.748954772949</MDI>
+      <MDI key="STATISTICS_MAXIMUM">10.445952415466</MDI>
+      <MDI key="STATISTICS_MEAN">-8.3444239733605</MDI>
+      <MDI key="STATISTICS_STDDEV">3.2155255548745</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
+    </Metadata>
+  </PAMRasterBand>
+</PAMDataset>

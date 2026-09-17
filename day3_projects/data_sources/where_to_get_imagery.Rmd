@@ -1,0 +1,120 @@
+---
+output:
+  pdf_document:
+    latex_engine: xelatex
+mainfont: Lucida Grande
+monofont: Menlo
+monofontoptions:
+  - HyphenChar=None
+header-includes:
+  - \AtBeginDocument{\raggedright}
+fontsize: 11pt
+geometry: margin=2cm
+# Knit writes the PDF straight into training_2026/handouts/
+knit: (function(input, ...) rmarkdown::render(input, output_dir = normalizePath(file.path(dirname(input), "..", "..", "handouts"))))
+---
+
+# Where to get imagery and map data
+
+Everything on your flash drive came from the sources below, and all of it is free. This is the page to keep: it is what lets you carry on after this week, with your own areas and your own dates.
+
+Every source here needs an internet connection, and most need a free account. Make the accounts before you need them, not on the day you are in a hurry.
+
+---
+
+## Satellite images
+
+### Copernicus Browser — Sentinel-1 and Sentinel-2
+
+**[browser.dataspace.copernicus.eu](https://browser.dataspace.copernicus.eu)** · free account required
+
+The easiest place to start. Draw a box on a map, pick dates, and see what the satellite saw.
+
+| | |
+|---|---|
+| **Sentinel-2** | Color and near-infrared, 10 m pixels, a new image every 5 days. This is what you want for buildings, crops, water and land cover. |
+| **Sentinel-1** | Radar. Sees through cloud, works at night. Use it when the flood you care about happened under cloud. |
+| **File size** | A full Sentinel-2 image is about 1 GB; a single-band download is much smaller. |
+
+**Worth knowing:** you can preview an image before downloading, which saves a lot of time in the rainy season. Set the cloud filter to 10% or less and work down the list. Images from 2022 onwards store their values 1,000 higher than older ones, so if you compare an old image with a new one, subtract 1,000 from the newer one first, or the newer one will look brighter everywhere.
+
+### USGS EarthExplorer — Landsat
+
+**[earthexplorer.usgs.gov](https://earthexplorer.usgs.gov)** · free account required
+
+Landsat 8 and 9: 30 m pixels, a new image every 8 days with both satellites. Coarser than Sentinel-2, but the archive goes back to the 1970s, so it is the only way to see what a place looked like before about 2015. Choose **Landsat Collection 2 Level-2** for images that are ready to use.
+
+### Microsoft Planetary Computer — the same images, without the clicking
+
+**[planetarycomputer.microsoft.com](https://planetarycomputer.microsoft.com)** · no account needed to browse
+
+Holds Sentinel-1, Sentinel-2 and Landsat, and lets a program pull just the piece you need. Worth knowing it exists if you ever work with someone who writes code. The Nsanje radar images and the Chikwawa flood images on your drive came from here.
+
+---
+
+## Ready-made map layers
+
+### OpenStreetMap, via Geofabrik
+
+**[download.geofabrik.de/africa/malawi.html](https://download.geofabrik.de/africa/malawi.html)** · no account
+
+All of Malawi's roads, buildings, health facilities, schools, hotels, rivers and boundaries, drawn by volunteers. Download `malawi-latest-free.shp.zip` (about 400 MB), unzip, and open the pieces you need in QGIS. Updated daily.
+
+**Worth knowing:** coverage is uneven. A town with no mapped buildings may simply not have been mapped yet. Never read "nothing there" as "nothing exists".
+
+### Google Open Buildings — building outlines
+
+**[sites.research.google/open-buildings](https://sites.research.google/open-buildings)** · no account
+
+Building outlines detected automatically across Africa. This is where the 36,077 Nsanje buildings came from. Downloads come as large files covering big areas, so expect to clip to your district.
+
+### WorldPop — population
+
+**[hub.worldpop.org](https://hub.worldpop.org)** · no account
+
+Estimated people per 100 m square. Pick Malawi, pick a year. **These are estimates from a model**, not a census count, and they are best used for "roughly how many people are near this" rather than for an exact number.
+
+### ESA WorldCover — land cover
+
+**[esa-worldcover.org](https://esa-worldcover.org)** · no account
+
+What each 10 m square is: trees, cropland, built-up, water, grassland. One map for 2020 and one for 2021, so it is good for "what is here" and not for change over time.
+
+### Global Human Settlement Layer — built-up area over time
+
+**[human-settlement.emergency.copernicus.eu](https://human-settlement.emergency.copernicus.eu)** · no account
+
+Built-up surface for every five years back to 1975, at 100 m. The right layer for urban growth, because it is consistent from one epoch to the next. **Note that 2025 and 2030 are projections, not measurements.** For measured change, stop at 2020.
+
+### CHIRPS — rainfall
+
+**[chc.ucsb.edu/data/chirps](https://www.chc.ucsb.edu/data/chirps)** · no account
+
+Rainfall estimates on a 5.5 km grid, daily to yearly, from 1981 to last month. Built from satellite data plus rain gauges.
+
+### NASA AppEEARS — vegetation (NDVI) and other NASA products
+
+**[appeears.earthdatacloud.nasa.gov](https://appeears.earthdatacloud.nasa.gov)** · free NASA Earthdata account required
+
+Upload a boundary, choose dates, choose a layer, and NASA returns files already cut to your area. This is how the monthly NDVI on your drive was made. Much easier than downloading whole global files.
+
+### Night lights
+
+**[eogdata.mines.edu/products/vnl](https://eogdata.mines.edu/products/vnl)** · free account required
+
+Yearly and monthly night lights, about 460 m. Download the file whose name contains **`average_masked`**: it has fires and background already removed. Files cover the whole world, around 300 MB each, so clip to Malawi after downloading. Free accounts must download through the website; automated downloading needs a paid subscription.
+
+---
+
+## Boundaries
+
+District and traditional authority boundaries are on your drive from **GADM** ([gadm.org](https://gadm.org)), which is free for non-commercial use but **may not be redistributed**. For anything you share or publish, use **geoBoundaries** ([geoboundaries.org](https://www.geoboundaries.org)), which allows reuse with attribution, or NSO's own boundary files, which are the authoritative ones for Malawi anyway.
+
+---
+
+## Four things that will save you a day
+
+1. **Check the coordinate system before anything else.** Everything on this drive is EPSG:32736 (UTM zone 36S), which measures in meters. Files you download will often be in latitude and longitude (EPSG:4326), which measures in degrees. QGIS will draw them together, but distances and areas will be wrong unless you reproject: **Raster ▸ Projections ▸ Warp**, or **Vector ▸ Data Management Tools ▸ Reproject Layer**.
+2. **Dry season for clear images, wet season for green vegetation.** June to October in Malawi gives cloud-free images. If you need to see the flood or the crops, you need wet-season images and you will fight cloud.
+3. **Compare like with like.** Two images from different seasons will differ for reasons that have nothing to do with what you are studying. Use the same months in both years.
+4. **Write down what you downloaded.** Satellite, date, and where you got it. In six months you will not remember, and neither will the person who asks where the number came from.

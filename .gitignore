@@ -4,6 +4,10 @@
 malawi workshop 2025/
 malawi workshop 2025-*.zip
 
+# Flash-drive contents: the national data library and the QGIS installer (see prep/scripts/)
+data_library/
+installers/
+
 # Workshop data and binaries we generate (rasters, shapefiles, QGIS projects, installers)
 *.tif
 *.tiff
@@ -12,6 +16,7 @@ malawi workshop 2025-*.zip
 *.dbf
 *.prj
 *.cpg
+*.qix
 *.qgz
 *.qgs
 *.qgd
@@ -32,3 +37,7 @@ Thumbs.db
 *~
 .ipynb_checkpoints/
 __pycache__/
+
+# Participant working files created while following a handout (not shipped, not tracked)
+day3_projects/*/outputs/
+day3_projects/*/checkpoints/data/

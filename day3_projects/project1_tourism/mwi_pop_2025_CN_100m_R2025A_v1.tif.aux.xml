@@ -1,0 +1,13 @@
+<PAMDataset>
+  <PAMRasterBand band="1">
+    <Description>mwi_pop_2025_CN_100m_R2025A_v1</Description>
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MINIMUM">0</MDI>
+      <MDI key="STATISTICS_MAXIMUM">117.69013977051</MDI>
+      <MDI key="STATISTICS_MEAN">5.0057332319899</MDI>
+      <MDI key="STATISTICS_STDDEV">9.3575003295734</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">5.288</MDI>
+    </Metadata>
+  </PAMRasterBand>
+</PAMDataset>

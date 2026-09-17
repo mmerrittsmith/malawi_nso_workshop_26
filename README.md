@@ -19,6 +19,8 @@ satellite imagery for measurement. QGIS is the only tool participants use.
 | [`agenda.md`](agenda.md) | The workshop outline — full 3-day schedule, session by session |
 | [`work_split.md`](work_split.md) | 50:50 preparation assignments, plus a couple items about the 2025 materials |
 | [`prep/checklist.md`](prep/checklist.md) | Pre-travel checklist: questions for NSO, build tasks, flash drives, verification |
+| [`prep/data_library.md`](prep/data_library.md) | What's in the flash-drive data library, sources, licenses, and how to rebuild it |
+| [`prep/instructor_notes/`](prep/instructor_notes/) | Answer keys and common problems for the Day 3 projects. Not for the drives |
 | [`prep/data_audit.md`](prep/data_audit.md) | What's wrong with the inherited exercise data, verified with `gdalinfo` |
 
 ## Shape of the workshop
@@ -58,9 +60,21 @@ Reused here:
 
 **Read the defects table in `work_split.md` before editing any 2025 deck**
 
+## Working materials
+
+Day folders hold the 2026 working copies. The 2025 originals stay untouched in
+`malawi workshop 2025/`. Like the 2025 folder, these files are gitignored (`.pptx`, `.tif`,
+shapefiles), so they live on disk only.
+
+- `day1_floods/lectures/` — `Day 1 Lecture Part A.pptx` (26 slides) and `Day 1 Lecture Part B.pptx`
+  (98 slides, the working copy of 2B)
+- `day1_floods/activity/` — the Nsanje Landsat/Sentinel-2 rasters and `nsanje_buildings.*`, copied
+  from `activity sessions/QGIS Activity/` and standardized to EPSG:32736, plus the GADM
+  districts (`gadm41_MWI_1`), deliberately left in EPSG:4326 (see `prep/data_audit.md`)
+
 ## Other repo assets used
 
-Paths relative to `../` (i.e. `Berkeley/projects/malawi/`):
+Paths relative to `../projects/malawi/` (i.e. `Berkeley/projects/malawi/`):
 
 - `gadm41_MWI_shp/` — GADM 4.1 Malawi admin levels 0–3. Basis of the Day 2 poverty map.
 - `mwi_pmt/` — PMT pipeline; source material for the Day 2 code demo.
